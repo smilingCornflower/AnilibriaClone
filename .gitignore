@@ -1,0 +1,6 @@
+.idea
+.venv
+__pycache__
+fixtures
+secret.py
+db.sqlite3
