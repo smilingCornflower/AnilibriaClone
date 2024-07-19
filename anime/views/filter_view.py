@@ -3,41 +3,15 @@ from rest_framework.response import Response
 from django.core.paginator import Paginator
 
 from anime.models.anime_model import Anime
-from anime.models.episode_model import Episode
-from services.s3_service import S3Service
+from anime.services import anime_to_dict
 
 from urllib.parse import unquote
 import json
 
 
 class FilterView(APIView):
-    s3 = S3Service()
-    def anime_to_dict(self, anime: Anime) -> dict:
-        image = anime.image
-        if image:
-            object_name = image.name
-        else:
-            object_name = 'others/NotFoundArt.jpg'
-
-        episodes_number = Episode.objects.filter(anime=anime).count()
-        output = {
-            'id': anime.id,
-            'title': anime.title,
-            'slug': anime.slug,
-            'description': anime.description[:160] + '...',
-            'episodes_number': episodes_number,
-            'year': anime.year,
-            'season': anime.season,
-            'favorites_count': anime.favorites_count,
-            'updated_at': anime.updated_at,
-            'status': anime.status,
-            'genres': [i.name for i in anime.genres.all()],
-            'image_data': FilterView.s3.get_url(object_name=object_name),
-        }
-        return output
-
     def get(self, request, page_number: int = 1):
-        anime_list = [self.anime_to_dict(anime=anime) for anime in Anime.objects.all()]
+        anime_list = [anime_to_dict(anime=anime, mode='full') for anime in Anime.objects.all()]
 
         req_data = request.GET.get('data')
 
@@ -75,7 +49,7 @@ class FilterView(APIView):
                 'slug': anime['slug'],
                 'description': anime['description'],
                 'episodes_number': anime['episodes_number'],
-                'image_data': anime['image_data']
+                'image_url': anime['image_url']
             }
             output_page.append(element)
 

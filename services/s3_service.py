@@ -22,6 +22,7 @@ class S3Service:
                                           )
             return True
         except ClientError as e:
+            print(f"s3_service.py upload_fileobj: {e}")
             return False
 
     def get_url(self, object_name):
@@ -35,7 +36,8 @@ class S3Service:
                 ExpiresIn=60  # 1 min
             )
             return url
-        except ClientError:
+        except ClientError as e:
+            print(f"s3_service.py upload_file: {e}")
             return False
 
     def delete_file(self, object_name) -> bool:
@@ -45,6 +47,8 @@ class S3Service:
                                          )
             return True
         except ClientError as e:
+            print(f"s3_service.py delete_file: {e}")
             return False
 
 
+s3 = S3Service()

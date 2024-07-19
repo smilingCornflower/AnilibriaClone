@@ -1,0 +1,55 @@
+anime_dict = {
+        'id': int,
+        'title': str,
+        'title_latin': str,
+        'slug': slug,
+        'description': str,
+        'episodes_number': int,
+        'image_url': str,
+
+        'year': int,
+        'season': str,
+        'favorites_count': int,
+        'status': str,
+
+        # Пустой список в случае, если у аниме нету чего-то из следующих:
+        'genres': [str, str, ...],
+        'voices': [str, str, ...],
+        'timings': [str, str, ...],
+        'subtitles': [str, str, ...],
+
+        'episode_url': str,
+        'episode_number': int,
+    }
+
+anime_panel = {
+        'id': int,
+        'title': str,
+        'slug': slug,
+        'description': str,
+        'episodes_number': int,
+        'image_url': str,
+}
+
+id - целое число больше или равное нулю
+title - название аниме на русском
+title_latin - название аниме на латинице, прямая транслитерация с японского название, рёдко перевот на англ
+slug - на основе title_latin, является url строкой
+description - описание на русском, длинный текст
+
+year - год
+status - может быть одним из [completed, ongoing, announcement]
+season - может быть одним из [winter, spring, summer, autumn]
+favorites_count - количество людей добавивший в любимые
+
+
+image_url - строка с url на картинку в S3 aws хранилище
+    В случае ошибок может возвращаться неверная ссылка на не существующее изображение
+    Если же аниме нету в базе данных, то вернётся пустая строка
+
+episode_url - строка с url на эпизод episode_number в S3 aws хранилище, по дефольту первый эпизод
+    В случае ошибок может возвращаться неверная ссылка на не существующий эпизод
+    Если же аниме нету в базе данных или имеет ноль серии, то вернётся пустая строка
+
+(genres, voices, timings, subtitles) - списки строк, если же у аниме нету каокого-то поля, то список будет пустым
+episodes_number - номер серии

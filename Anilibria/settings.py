@@ -26,6 +26,7 @@ INSTALLED_APPS = [
 
     'anime',
     'main',
+    'users',
 ]
 
 MIDDLEWARE = [
@@ -73,25 +74,28 @@ DATABASES = {
     }
 }
 
+SESSION_COOKIE_AGE = 3600 * 2400    # 100 days
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False
+
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 AWS_ACCESS_KEY_ID = secret.aws_access_key_id
 AWS_SECRET_ACCESS_KEY = secret.aws_secret_access_key
 AWS_STORAGE_BUCKET_NAME = secret.bucket_name
 AWS_S3_REGION_NAME = secret.aws_region
 
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = secret.email
+EMAIL_HOST_PASSWORD = secret.app_password
+# SMTP_PASSWORD = secret.app_password
+
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
-    {
         'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+        'OPTIONS': {'min_length': 6}
     },
 ]
 
@@ -99,9 +103,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'ru'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Almaty'
 
 USE_I18N = True
 
@@ -117,3 +121,7 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+AUTH_USER_MODEL = 'users.User'
+
+LOGIN_URL = '/user/login/'
