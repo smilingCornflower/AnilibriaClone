@@ -1,9 +1,10 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
-
+from django.shortcuts import render
 from anime.services import get_aniqueryset, anime_to_dict
 from services.s3_service import S3Service
 from .models import YouTubeVideo
+from .context import context
 
 
 class YouTubeVideoView(APIView):
@@ -40,4 +41,4 @@ class SidePanelView(APIView):
 
 class IndexView(APIView):
     def get(self, request):
-        return Response()
+        return render(request, 'index.html', context={"urls": context})

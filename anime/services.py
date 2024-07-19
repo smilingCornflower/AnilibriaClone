@@ -75,6 +75,10 @@ def get_aniqueryset(order_mode: str):
     else:
         raise ValueError("No such ordering")
 
+def get_anime_by_id(anime_id: int):
+    anime = Anime.objects.filter(id=anime_id).first()
+    return anime
+
 
 def get_episodes_number(anime_id: int) -> int:
     try:

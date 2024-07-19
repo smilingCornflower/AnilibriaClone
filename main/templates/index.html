@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Backend Documentation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9; /* Очень светлый серый */
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1000px; /* Увеличенная ширина контейнера */
+            margin: auto;
+            background: #ffffff; /* Белый */
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            overflow: hidden; /* Скрытие переполнения */
+        }
+        h1 {
+            text-align: center;
+            color: #4a90e2; /* Спокойный голубой */
+        }
+        .url-list {
+            list-style-type: none;
+            padding: 0;
+        }
+        .url-list li {
+            background: #f2f4f7; /* Очень светлый серо-голубой */
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 8px;
+        }
+        .url-list li a {
+            text-decoration: none;
+            color: #007acc; /* Спокойный синий */
+        }
+        .url-list li a:hover {
+            text-decoration: underline;
+        }
+        .url-description {
+            color: #555555; /* Тёмно-серый */
+            font-size: 15px;
+        }
+        .more-info {
+            display: none;
+            color: #333333; /* Ещё более тёмный серый */
+            font-size: 15px;
+            margin-top: 10px;
+            padding: 10px;
+            background: #eef4f7; /* Пастельный голубой */
+            border-radius: 4px;
+        }
+        .show-more {
+            cursor: pointer;
+            color: #007acc; /* Спокойный синий */
+            text-decoration: underline;
+        }
+    </style>
+    <script>
+        function toggleMoreInfo(id) {
+            var info = document.getElementById(id);
+            if (info.style.display === "none") {
+                info.style.display = "block";
+            } else {
+                info.style.display = "none";
+            }
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>API Documentation</h1>
+        <ul class="url-list">
+            {% for url, short_description, full_description in urls %}
+                <li>
+                    <a href="http://localhost:8000/{{ url }}">{{ url }}</a>
+                    <div class="url-description">{{ short_description }}</div>
+                    <div class="show-more" onclick="toggleMoreInfo('more-info-{{ forloop.counter }}')">Подробнее</div>
+                    <div id="more-info-{{ forloop.counter }}" class="more-info">
+                        {{ full_description|safe }}
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+</body>
+</html>

@@ -2,7 +2,7 @@ from django.core.validators import FileExtensionValidator
 from django.db import models
 
 from .other_models import Genre, Voice, Timing, Subtitles
-
+from services.s3_service import S3Service
 from os import path
 
 
@@ -74,3 +74,11 @@ class Anime(models.Model):
 
     def __str__(self):
         return self.title
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        if self.image:
+            image = self.image
+            image_name = self.image.name
+            s3 = S3Service()
+            s3.upload_fileobj(file_obj=image, object_name=image_name)

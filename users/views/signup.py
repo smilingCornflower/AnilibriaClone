@@ -69,13 +69,13 @@ class SignupView(APIView):
             User.objects.get(username=username)
             return Response(status=456)
         except User.DoesNotExist:
-            ...
+            pass
 
         try:
             User.objects.get(email=email)
             return Response(status=457)
         except User.DoesNotExist:
-            ...
+            pass
 
         try:
             user = User.objects.create_user(username=username, email=email, password=password)
@@ -84,14 +84,7 @@ class SignupView(APIView):
             user.activation_token = get_random_string(length=50)
             user.save()
         except Exception as e:
-
-            write_log(f"\nexception: {e}")
-            write_log(f"username: {username}")
-            write_log(f"email: {email}")
-            write_log(f"password: {password}")
-            write_log(f"time: {datetime.now().isoformat()}\n")
-
-            return Response(status=500)
+            return Response({"detail", repr(e)}, status=500)
 
         activation_link = f'localhost:5173/user/activate/{user.activation_token}'
         send_activation_email(email, activation_link)
