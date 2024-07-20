@@ -1,16 +1,25 @@
 context = [
     (
-        'main_page/',
-        'Ютуб видео на главной странице',
+        'main_page/', 'Ютуб видео на главной странице',
         '''
-<b>Метод:</b> GET<br><br>
-В ответе будет, список словарей, каждый элемент списка имеет структуру:
-<ul>
-    <li><code>"id": int</code></li>
-    <li><code>"title": str</code> - Название видео на ютубе</li>
-    <li><code>"url": str</code> - Ссылка на видео</li>
-    <li><code>"image_url": str</code> - Ссылка на обложку видео, ссылка будет действительна одну минуту</li>
-</ul>
+            <p><strong>Метод:</strong> GET </p>
+            <p><strong>Описание:</strong> В ответе будет, список словарей, каждый элемент списка имеет структуру: </p>  
+            <p><strong>Формат ответа:</strong></p>
+                <pre style="padding-left: 20px;">
+                    {
+                        "id": int,
+                        "title": str,
+                        "url": str,
+                        "image_url": str,
+                    }
+                </pre>  
+            <p><strong></strong></p>
+            <ul>
+                <li><code>"id"</code> - Идентификатор, целое натурально число </li>
+                <li><code>"title"</code> - Название видео на ютубе</li>
+                <li><code>"url"</code> - Ссылка на видео</li>
+                <li><code>"image_url"</code> - Ссылка на обложку видео, ссылка будет действительна одну минуту</li>
+            </ul>
         '''
     ),
     (
@@ -21,18 +30,26 @@ context = [
         <p>В ответе будет: Список словарей, каждый элемент списка имеет структуру:</p>
         <pre style="padding-left: 20px;">
         {
-            "id": int              — Уникальный идентификатор аниме, целое число больше или равное нулю
-            "title": str           — Название аниме на русском
-            "title_latin": str    — Название аниме на латинице (прямая транслитерация с японского)
-            "slug": str            — URL-адрес аниме на сайте
-            "description": str    — Описание аниме на русском
-            "episodes_number": int — Количество эпизодов
-            "image_url": str       — Ссылка на обложку аниме, ссылка будет действительна одну минуту
+            "id": int,
+            "title": str,
+            "title_latin": str,
+            "slug": str,
+            "description": str,
+            "episodes_number": int,
+            "image_url": str,
         }
         </pre>
-        
+    <ul>
+        <li><code>"title"</code> — Название аниме на русском</li>
+        <li><code>"title_latin"</code> — Название аниме на латинице (прямая транслитерация с японского)</li>
+        <li><code>"slug"</code> — URL-адрес аниме на сайте</li>
+        <li><code>"description"</code> — Описание аниме на русском</li>
+        <li><code>"episodes_number"</code> — Количество эпизодов</li>
+        <li><code>"image_url"</code> — Ссылка на обложку аниме, ссылка будет действительна одну минуту</li>
+    </ul>
         '''
     ),
+
     (
         'release/', 'Список всех релизов на сайте',
         '''
@@ -45,16 +62,25 @@ context = [
         
         <pre style="padding-left: 20px;">
         {
-            "id": int        — Уникальный идентификатор аниме, целое число больше или равное нулю
-            "title": str     — Название аниме на русском
-            "title_latin": str  — Название аниме на латинице, прямая транслитерация с японского названия.
-            "slug": str      — На основе "title_latin", представляет собой URL-строку
-            "description": str  — Описание аниме на русском, длинный текст
-            "episodes_number": int — Количество эпизодов
-            "image_url": str    — Строка с URL на картинку, ссылка будет действительна одну минуту
+            "id": int,
+            "title": str,
+            "title_latin": str,
+            "slug": str,
+            "description": str,
+            "episodes_number": int,
+            "image_url": str,
         }
         </pre>
-        
+        <ul>
+            <li><code>"id"</code> — Целое число больше или равное нулю</li>
+            <li><code>"title"</code> — Название аниме на русском</li>
+            <li><code>"title_latin"</code> — Название аниме на латинице, прямая транслитерация с японского названия</li>
+            <li><code>"slug"</code> — На основе "title_latin", представляет собой URL-строку</li>
+            <li><code>"description"</code> — Описание аниме на русском, длинный текст</li>
+            <li><code>"episodes_number"</code> — Количество эпизодов</li>
+            <li><code>"image_url"</code> — Строка с URL на картинку, ссылка будет действительна одну минуту</li>
+        </ul>
+
         <p><strong>Примечания:</strong></p>
         <pre style="padding-left: 20px;">
         - В случае ошибок <code>image_url</code> может возвращаться неверная ссылка на несуществующее изображение.
@@ -77,7 +103,15 @@ context = [
         
         <p>После указания URL можно указать через знак вопроса <code>data={}</code> параметры фильтрации и сортировки.</p>
         <p>Если не указать <code>data</code> и сделать запрос по <code>release/filter/</code>, не будут применены параметры фильтрации, и будут выведены все аниме в порядке популярности в формате <code>anime_panel</code>.</p><br>
-        
+        <pre>
+        data = {
+            "genres": [str, ...],
+            "year": [int, ...],
+            "season": [str, ...],
+            "popular_or_new": str,
+            "is_completed": bool,
+        }
+        </pre>
         <b>Параметры фильтрации:</b><br>
         <ul>
             <li><b>genres</b>: [str, ...] — Список жанров для фильтрации. Например: <code>"genres": ["Экшен", "Сёнен"]</code>. В данном примере будут выведены только те аниме, которые имеют в жанрах "Экшен" и "Сёнен". Аниме могут иметь и другие жанры, но все жанры из <code>genres</code> должны быть в аниме.</li>
@@ -86,7 +120,6 @@ context = [
             <li><b>popular_or_new</b>: str — Параметр сортировки. Может принимать значения <code>"popular"</code> или <code>"new"</code>. Например: <code>"popular_or_new": "popular"</code> для сортировки по популярности, или <code>"new"</code> для сортировки по новизне.</li>
             <li><b>is_completed</b>: bool — Фильтр для завершенных аниме. Может быть <code>true</code> или <code>false</code>. Например: <code>"is_completed": true</code> для фильтрации только завершенных аниме.</li>
         </ul>
-        
         '''
     ),
     (
@@ -94,45 +127,113 @@ context = [
         'Параметр data={...} нужно прописывать после relase/int/'
     ),
     (
-        'release/watch/anim_pk/', 'Страница конкртеного аниме, вместо anime_pk нужно прописать его id или slug',
-'''
-<p><strong>URL:</strong> <code>release/watch/&lt;int:anime_id&gt;/</code> или <code>release/watch/&lt;slug:anime_slug&gt;/</code></p>
-<p><strong>Метод:</strong> GET</p>
-<p><strong>Описание:</strong> Возвращает аниме с <code>id=anime_id</code> или <code>slug=anime_slug</code> в формате <code>anime_dict</code>. Если в базе данных нет такого аниме, вернётся ответ с статусом 404 и информацией об ошибке:</p>
+        'release/watch/black-clover/', 'Страница конкртеного аниме, после watch/ нужно прописать его id или slug',
+        '''
+        <p><strong>URL:</strong> <code>release/watch/&lt;int:anime_id&gt;/</code> или <code>release/watch/&lt;slug:anime_slug&gt;/</code></p>
+        <p><strong>Метод:</strong> GET</p>
+        <p><strong>Описание:</strong> Возвращает аниме с <code>id=anime_id</code> или <code>slug=anime_slug</code> в формате <code>anime_dict</code>. Если в базе данных нет такого аниме, вернётся ответ с статусом 404 и информацией об ошибке:</p>
+        
+        <pre style="padding-left: 20px;">
+        {
+            "detail": "Информация об ошибке"
+        }
+        </pre>
+        
+        <p><strong>Формат ответа:</strong></p>
+        <pre style="padding-left: 20px;">
+            <strong>anime_dict</strong> = {
+                "id": int,
+                "title": str,
+                "title_latin": str,
+                "slug": str,
+                "description": str,
+                "episodes_number": int,
+                "image_url": str,
+                "year": int,
+                "season": str,
+                "favorites_count": int,
+                "status": str,
+                "genres": [str, str, ...],
+                "voices": [str, str, ...],
+                "timings": [str, str, ...],
+                "subtitles": [str, str, ...],
+                "episode_url": str,
+                "episode_number": int
+            }
+        </pre> 
+        <p><strong>anime_dict:</strong></p>
+        <ul>
+    <li><code>"id"</code> — Целое число больше или равное нулю</li>
+    <li><code>"title"</code> — Название аниме на русском</li>
+    <li><code>"title_latin"</code> — Название аниме на латинице, прямая транслитерация с японского названия, реже перевод на английский</li>
+    <li><code>"slug"</code> — На основе <code>title_latin</code>, представляет собой URL-строку</li>
+    <li><code>"description"</code> — Описание аниме на русском, длинный текст</li>
+    <li><code>"episodes_number"</code> — Количество эпизодов</li>
+    <li><code>"image_url"</code> — Ссылка на обложку аниме в S3 AWS хранилище</li>
+    <li><code>"year"</code> — Год</li>
+    <li><code>"season"</code> — Сезон, может быть одним из: [winter, spring, summer, autumn]</li>
+    <li><code>"favorites_count"</code> — Количество людей, добавивших аниме в любимые</li>
+    <li><code>"status"</code> — Статус аниме, может быть одним из: [completed, ongoing, announcement]</li>
+    <li><code>"genres"</code> — Список жанров. Если аниме не имеет жанров, список будет пустым</li>
+    <li><code>"voices"</code> — Список голосов. Если аниме не имеет голосов, список будет пустым</li>
+    <li><code>"timings"</code> — Список тех, кто отвечал за тайминги. Если аниме не имеет таймингов, список будет пустым</li>
+    <li><code>"subtitles"</code> — Список тех, кто отвечал за субтитры. Если аниме не имеет субтитров, список будет пустым</li>
+    <li><code>"episode_url"</code> — Ссылка на эпизод <code>episode_number</code> в S3 AWS хранилище. По умолчанию первый эпизод. Если аниме нет в базе данных или имеет ноль серий, вернётся пустая строка</li>
+    <li><code>"episode_number"</code> — Номер серии</li>
 
-<pre style="padding-left: 20px;">
-{
-    "detail": "Информация"
-}
-</pre>
-
-<p><strong>Формат ответа:</strong></p>
-
-<p><strong>anime_dict:</strong></p>
-<ul>
-    <li><code>id</code>: <code>int</code> — Целое число больше или равное нулю</li>
-    <li><code>title</code>: <code>str</code> — Название аниме на русском</li>
-    <li><code>title_latin</code>: <code>str</code> — Название аниме на латинице, прямая транслитерация с японского названия, реже перевод на английский</li>
-    <li><code>slug</code>: <code>slug</code> — На основе <code>title_latin</code>, представляет собой URL-строку</li>
-    <li><code>description</code>: <code>str</code> — Описание аниме на русском, длинный текст</li>
-    <li><code>episodes_number</code>: <code>int</code> — Количество эпизодов</li>
-    <li><code>image_url</code>: <code>str</code> — Ссылка на обложку аниме в S3 AWS хранилище</li>
-    <li><code>year</code>: <code>int</code> — Год</li>
-    <li><code>season</code>: <code>str</code> — Сезон, может быть одним из: [winter, spring, summer, autumn]</li>
-    <li><code>favorites_count</code>: <code>int</code> — Количество людей, добавивших аниме в любимые</li>
-    <li><code>status</code>: <code>str</code> — Статус аниме, может быть одним из: [completed, ongoing, announcement]</li>
-    <li><code>genres</code>: <code>[str, str, ...]</code> — Список жанров. Если аниме не имеет жанров, список будет пустым</li>
-    <li><code>voices</code>: <code>[str, str, ...]</code> — Список голосов. Если аниме не имеет голосов, список будет пустым</li>
-    <li><code>timings</code>: <code>[str, str, ...]</code> — Список тех кто отвечал за тайминги. Если аниме не имеет времени, список будет пустым</li>
-    <li><code>subtitles</code>: <code>[str, str, ...]</code> — Список тех кто отвечал за субтитры. Если аниме не имеет субтитров, список будет пустым</li>
-    <li><code>episode_url</code>: <code>str</code> — Ссылка на эпизод <code>episode_number</code> в S3 AWS хранилище. По умолчанию первый эпизод. Если аниме нет в базе данных или имеет ноль серий, вернётся пустая строка</li>
-    <li><code>episode_number</code>: <code>int</code> — Номер серии</li>
-</ul>
-
-'''
-    )
-
+        </ul>
+        
+        '''
+    ),
+    (
+        'release/watch/random/', 'Страница рандомного анмие, работает анлогично release/watch/<anime_key>/',
+        'Под капотом, просто вместо random ставится рандомное число'
+    ),
+    ('release/watch/31/1/', 'Возвращает episode_url, ссылка на эпизод, и  episode_number, номер серии',
+     '''
+    <p><strong>URL:</strong> <code> release/watch/<anime_id>/<episode_number>/ или release/watch/<anime_slug>/<episode_number>/</code></p>
+    <p><strong>Метод:</strong> GET </p>
+    <p><strong>Описание:</strong> Возвращает ссылку на конкретный эпизод episode_number для аниме с id=anime_id или slug=anime_slug </p>
+    <p><strong>Формат ответа:</strong></p>
+        <pre style="padding-left: 20px;">
+            {
+                "episode_url": str,
+                "episode_number": int,
+            }
+        </pre> 
+    <ul>
+        <li><code>"episode_url"</code> - Ссылка на видео, ссылка будет действительна одну минуту</li>
+        <li><code>"episode_number"</code> - Номер эпизода</li>
+    </ul>
+        
+    <p><strong>Примечания:</strong></p>
+        <ul>
+        <li> - Если же в базе данных нету такого эпизода, то статус в ответе будет 404 и также информация об ошибке {"detail": "информация"} </li>
+        <li> - Если же в s3 хранилище нету такой серии, а в бд она есть, то будет возвращена нерабочая ссылка на несуществующее аниме </li>
+        </ul>
+     '''),
 ]
+
+'''
+    <p><strong>URL:</strong> <code> URL </code></p>
+    <p><strong>Метод:</strong> Method </p>
+    <p><strong>Описание:</strong> Description </p>
+        <pre style="padding-left: 20px;">
+            {
+                maybe
+            }
+        </pre>    
+    <p><strong>Формат ответа:</strong></p>
+    <pre style="padding-left: 20px;">
+            {
+                maybe
+            }
+        </pre>    
+    <p><strong>anime_dict:</strong></p>
+    <ul>
+        <li><code>id</code>: <code>int</code> — Целое число больше или равное нулю</li>
+    </ul>
+'''
 #
 #
 #     'release/watch/1/': 'Страница конкртеного аниме, число это индекс тайтла',
