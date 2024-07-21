@@ -1,4 +1,4 @@
-import secret
+from Anilibria import settings
 import boto3
 from botocore.exceptions import ClientError
 
@@ -7,12 +7,12 @@ class S3Service:
     def __init__(self):
         self.s3_client = boto3.client(
             's3',
-            aws_access_key_id=secret.aws_access_key_id,
-            aws_secret_access_key=secret.aws_secret_access_key,
-            region_name=secret.aws_region,
-            endpoint_url=secret.endpoint_url,
+            aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
+            aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,
+            region_name=settings.AWS_S3_REGION_NAME,
+            endpoint_url=settings.ENDPOINT_URL,
         )
-        self.bucket_name = secret.bucket_name
+        self.bucket_name = settings.AWS_STORAGE_BUCKET_NAME
 
     def upload_fileobj(self, file_obj, object_name) -> bool:
         try:

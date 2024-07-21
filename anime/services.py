@@ -68,7 +68,7 @@ def get_anilist(order_mode: str) -> list:
 
 
 def get_aniqueryset(order_mode: str):
-    ordering_args = ['updated_at', '-updated_at']
+    ordering_args = ['updated_at', '-updated_at', 'favorites_count', '-favorites_count']
     if order_mode in ordering_args:
         result = Anime.objects.order_by(order_mode)
         return result

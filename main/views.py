@@ -5,6 +5,7 @@ from anime.services import get_aniqueryset, anime_to_dict
 from services.s3_service import S3Service
 from .models import YouTubeVideo
 from .context import context
+from urllib.parse import unquote
 
 
 class YouTubeVideoView(APIView):
@@ -38,6 +39,26 @@ class SidePanelView(APIView):
             output.append(anime_panel)
 
         return Response(output)
+
+
+class SearchView(APIView):
+    def get(self, request):
+        search_title = unquote(request.GET.get('title', ''))
+        search_title = search_title.lower()
+
+        all_anime = get_aniqueryset(order_mode='-favorites_count')
+        all_titles =[anime_to_dict(anime=anime, mode='short') for anime in all_anime]
+
+        if search_title:
+            output = []
+            for anidict in all_titles:
+                if search_title in anidict['title'].lower():
+                    output.append(anidict)
+        else:
+            output = all_titles
+
+        return Response(output)
+
 
 class IndexView(APIView):
     def get(self, request):

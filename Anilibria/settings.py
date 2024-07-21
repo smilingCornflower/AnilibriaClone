@@ -1,12 +1,13 @@
 from pathlib import Path
-import secret
+import os
+from dotenv import load_dotenv
 
+load_dotenv()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = secret.secret_key
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -69,27 +70,46 @@ WSGI_APPLICATION = 'Anilibria.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'Anilibria',
+        'USER': 'smile',
+        'PASSWORD': os.getenv('DB_PASSWORD'),
+        'HOST': 'localhost',
+        'PORT':5433,
     }
 }
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
 
 SESSION_COOKIE_AGE = 3600 * 2400    # 100 days
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False
 
-DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-AWS_ACCESS_KEY_ID = secret.aws_access_key_id
-AWS_SECRET_ACCESS_KEY = secret.aws_secret_access_key
-AWS_STORAGE_BUCKET_NAME = secret.bucket_name
-AWS_S3_REGION_NAME = secret.aws_region
+SECRET_KEY = os.getenv("SECRET_KEY")
+
+#AWS_ACCESS_KEY_ID = secret.aws_access_key_id
+#AWS_SECRET_ACCESS_KEY = secret.aws_secret_access_key
+# AWS_S3_REGION_NAME = secret.aws_region
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = secret.email
-EMAIL_HOST_PASSWORD = secret.app_password
+EMAIL_HOST_USER = os.getenv('EMAIL')
+EMAIL_HOST_PASSWORD = os.getenv('APP_PASSWORD')
 # SMTP_PASSWORD = secret.app_password
+
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
+AWS_S3_REGION_NAME = os.getenv('AWS_REGION')
+AWS_STORAGE_BUCKET_NAME = os.getenv('BUCKET_NAME')
+ENDPOINT_URL = os.getenv('ENDPOINT_URL')
+SECRET_KEY = os.getenv('SECRET_KEY')
+
 
 
 AUTH_PASSWORD_VALIDATORS = [
@@ -125,3 +145,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'users.User'
 
 LOGIN_URL = '/user/login/'
+
+import os
+
+EMAIL = os.getenv('EMAIL')
+APP_PASSWORD = os.getenv('APP_PASSWORD')
