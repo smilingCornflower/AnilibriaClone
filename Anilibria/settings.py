@@ -68,22 +68,22 @@ TEMPLATES = [
 WSGI_APPLICATION = 'Anilibria.wsgi.application'
 
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'Anilibria',
-        'USER': 'smile',
-        'PASSWORD': os.getenv('DB_PASSWORD'),
-        'HOST': 'localhost',
-        'PORT':5433,
-    }
-}
 # DATABASES = {
 #     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'Anilibria',
+#         'USER': 'smile',
+#         'PASSWORD': os.getenv('DB_PASSWORD'),
+#         'HOST': 'localhost',
+#         'PORT':5433,
 #     }
 # }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
+}
 
 SESSION_COOKIE_AGE = 3600 * 2400    # 100 days
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False
