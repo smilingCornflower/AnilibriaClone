@@ -16,6 +16,7 @@ urlpatterns = [
     path('watch/random/', RandomWatchView.as_view()),
     path('watch/<int:anime_id>/', WatchView.as_view()),
     path('watch/<slug:anime_slug>/', WatchView.as_view()),
+
     path('watch/<int:anime_id>/<int:episode_number>/', WatchEpisodeView.as_view()),
     path('watch/<slug:anime_slug>/<int:episode_number>/', WatchEpisodeView.as_view()),
 ]

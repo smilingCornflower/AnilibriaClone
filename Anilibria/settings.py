@@ -3,16 +3,16 @@ import os
 from dotenv import load_dotenv
 
 load_dotenv()
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
-# SECURITY WARNING: keep the secret key used in production secret!
-
-# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+SERVER_HOST = os.getenv('SERVER_HOST')
+ALLOWED_HOSTS = [
+                    '127.0.0.1',
+                    'localhost',
+                ] + [SERVER_HOST]
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -43,8 +43,11 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
 ]
 
+server_origin = os.getenv('SERVER_ORIGIN')
+
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
+    server_origin,
 ]
 
 ROOT_URLCONF = 'Anilibria.urls'
@@ -67,31 +70,39 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'Anilibria.wsgi.application'
 
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'Anilibria',
-#         'USER': 'smile',
-#         'PASSWORD': os.getenv('DB_PASSWORD'),
-#         'HOST': 'localhost',
-#         'PORT':5433,
-#     }
-# }
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+use_sqlite3 = os.getenv('use_sqlite3')
+if use_sqlite3:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
     }
-}
+else:
+    db_username = os.getenv('DB_USERNAME')
+    db_name = os.getenv('DB_NAME')
+    db_password = os.getenv('DB_PASSWORD')
+    db_host = os.getenv('DB_HOST')
+    db_port = os.getenv('DB_PORT')
 
-SESSION_COOKIE_AGE = 3600 * 2400    # 100 days
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': db_name,
+            'USER': db_username,
+            'PASSWORD': db_password,
+            'HOST': db_host,
+            'PORT': db_port,
+        }
+    }
+
+SESSION_COOKIE_AGE = 3600 * 2400  # 100 days
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False
 
 SECRET_KEY = os.getenv("SECRET_KEY")
 
-#AWS_ACCESS_KEY_ID = secret.aws_access_key_id
-#AWS_SECRET_ACCESS_KEY = secret.aws_secret_access_key
+# AWS_ACCESS_KEY_ID = secret.aws_access_key_id
+# AWS_SECRET_ACCESS_KEY = secret.aws_secret_access_key
 # AWS_S3_REGION_NAME = secret.aws_region
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
@@ -110,15 +121,12 @@ AWS_STORAGE_BUCKET_NAME = os.getenv('BUCKET_NAME')
 ENDPOINT_URL = os.getenv('ENDPOINT_URL')
 SECRET_KEY = os.getenv('SECRET_KEY')
 
-
-
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
         'OPTIONS': {'min_length': 6}
     },
 ]
-
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
@@ -130,7 +138,6 @@ TIME_ZONE = 'Asia/Almaty'
 USE_I18N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
