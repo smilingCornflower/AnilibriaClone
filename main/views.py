@@ -7,9 +7,20 @@ from .models import YouTubeVideo
 from .context import context
 from urllib.parse import unquote
 
+import json
+from services.redis_service import R, EXPIRE_1DAY
+
 
 class YouTubeVideoView(APIView):
     def get(self, request):
+
+        hash_name = "main_page"
+        redis_output = R.get(hash_name)
+
+        if redis_output:
+            redis_output = json.loads(redis_output)
+            return Response(redis_output, status=200)
+
         youtube_videos = YouTubeVideo.objects.all()
         output = []
         s3 = S3Service()
@@ -26,17 +37,34 @@ class YouTubeVideoView(APIView):
             }
             output.append(element)
 
-        response = Response(output)
-        return response
+
+
+        output_json = json.dumps(output, ensure_ascii=False)
+        R.set(hash_name, output_json)
+        R.expire(hash_name, EXPIRE_1DAY)
+
+        return Response(output)
+
 
 
 class SidePanelView(APIView):
     def get(self, request):
+
+        hash_name = "side_panel"
+        redis_output = R.get(hash_name)
+        if redis_output:
+            redis_output = json.loads(redis_output)
+            return Response(redis_output, status=200)
+
         last_five_updated_anime = get_aniqueryset(order_mode='-updated_at')[:5]
         output = []
         for anime in last_five_updated_anime:
             anime_panel = anime_to_dict(anime, mode='short')
             output.append(anime_panel)
+
+        output_json = json.dumps(output, ensure_ascii=False)
+        R.set(hash_name, output_json)
+        R.expire(hash_name, EXPIRE_1DAY)
 
         return Response(output)
 

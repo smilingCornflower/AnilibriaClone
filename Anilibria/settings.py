@@ -6,10 +6,41 @@ load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-DEBUG = True
+# Project
+DEBUG = os.getenv('DEBUG') == "True"
+SECRET_KEY = os.getenv("SECRET_KEY")
 
+# Email
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+APP_PASSWORD = os.getenv('APP_PASSWORD')
+
+# todo: Один из этих двух не нужен, потом надо разобраться
+EMAIL_HOST_USER = os.getenv('EMAIL')
+EMAIL = os.getenv('EMAIL')
+
+
+# Databse
+DATABASE = os.getenv('DATABASE')
+DB_USERNAME = os.getenv('DB_USERNAME')
+DB_NAME = os.getenv('DB_NAME')
+DB_PASSWORD = os.getenv('DB_PASSWORD')
+DB_PORT = os.getenv('DB_PORT')
+
+# WEB
 INTERNAL_HOST = os.getenv('INTERNAL_HOST')
 PUBLIC_HOST = os.getenv('PUBLIC_HOST')
+FRONTEND_PORT = os.getenv('FRONTEND_PORT')
+
+# AWS
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
+AWS_S3_REGION_NAME = os.getenv('AWS_REGION')
+AWS_STORAGE_BUCKET_NAME = os.getenv('BUCKET_NAME')
+ENDPOINT_URL = os.getenv('ENDPOINT_URL')
 
 ALLOWED_HOSTS = [
     '127.0.0.1',
@@ -18,10 +49,13 @@ ALLOWED_HOSTS = [
     PUBLIC_HOST,
 ]
 
-frontend_origin = f"http://{PUBLIC_HOST}:5173"
+PUBLIC_ORIGIN = f"http://{PUBLIC_HOST}:{FRONTEND_PORT}"
+INTERNAL_ORIGIN = f"http://{INTERNAL_HOST}:{FRONTEND_PORT}"
+
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
-    frontend_origin,
+    PUBLIC_ORIGIN,
+    INTERNAL_ORIGIN,
 ]
 
 INSTALLED_APPS = [
@@ -73,26 +107,18 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'Anilibria.wsgi.application'
 
-DATABASE = os.getenv('DATABASE')
 
 if DATABASE == 'postgresql':
-    db_username = os.getenv('DB_USERNAME')
-    db_name = os.getenv('DB_NAME')
-    db_password = os.getenv('DB_PASSWORD')
-    db_host = os.getenv('INTERNAL_HOST')
-    db_port = os.getenv('DB_PORT')
-
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
-            'NAME': db_name,
-            'USER': db_username,
-            'PASSWORD': db_password,
-            'HOST': db_host,
-            'PORT': db_port,
+            'NAME': DB_NAME,
+            'USER': DB_USERNAME,
+            'PASSWORD': DB_PASSWORD,
+            'HOST': 'localhost',
+            'PORT': DB_PORT,
         }
     }
-
 else:
     DATABASES = {
         'default': {
@@ -104,31 +130,6 @@ else:
 SESSION_COOKIE_AGE = 3600 * 2400  # 100 days
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False
 
-SECRET_KEY = os.getenv("SECRET_KEY")
-
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-
-# todo: Один из этих двух не нужен, потом надо разобраться
-EMAIL_HOST_USER = os.getenv('EMAIL')
-EMAIL = os.getenv('EMAIL')
-APP_PASSWORD = os.getenv('APP_PASSWORD')
-# EMAIL_HOST_PASSWORD = os.getenv('APP_PASSWORD')
-# SMTP_PASSWORD = secret.app_password
-
-# AWS_ACCESS_KEY_ID = secret.aws_access_key_id
-# AWS_SECRET_ACCESS_KEY = secret.aws_secret_access_key
-# AWS_S3_REGION_NAME = secret.aws_region
-
-DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')
-AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
-AWS_S3_REGION_NAME = os.getenv('AWS_REGION')
-AWS_STORAGE_BUCKET_NAME = os.getenv('BUCKET_NAME')
-ENDPOINT_URL = os.getenv('ENDPOINT_URL')
-SECRET_KEY = os.getenv('SECRET_KEY')
 
 AUTH_PASSWORD_VALIDATORS = [
     {

@@ -9,28 +9,32 @@ from anime.services import anime_to_dict
 from services.s3_service import s3
 
 from random import choice
-
+import json
+from services.redis_service import R, EXPIRE_10MIN
 
 
 class WatchView(APIView):
-    def get(self, request, anime_id=None, anime_slug=None):
-        if anime_id:
-            anime = get_object_or_404(Anime, id=anime_id)
-        else:
-            anime = get_object_or_404(Anime, slug=anime_slug)
+    def get(self, request, anime_slug: str):
+        hash_name = f'watch_{anime_slug}'
+        redis_output = R.get(hash_name)
+        if redis_output:
+            redis_output = json.loads(redis_output)
+            return Response(redis_output, status=200)
 
+        anime = get_object_or_404(Anime, slug=anime_slug)
         anime_info = anime_to_dict(anime, mode='full')
+
+        anime_info_json = json.dumps(anime_info, ensure_ascii=False)
+        R.set(hash_name, anime_info_json)
+        R.expire(hash_name, EXPIRE_10MIN)
 
         return Response(anime_info, status=200)
 
 
 class WatchEpisodeView(APIView):
-    def get(self, request, episode_number: int, anime_id=None, anime_slug=None):
-        if anime_id:
-            episode = Episode.objects.filter(anime__id=anime_id, episode_number=episode_number).first()
-        else:
-            episode = Episode.objects.filter(anime__slug=anime_slug, episode_number=episode_number).first()
+    def get(self, request, anime_slug: str, episode_number: int):
 
+        episode = Episode.objects.filter(anime__slug=anime_slug, episode_number=episode_number).first()
         try:
             episode_name = episode.video.name
             episode_url = s3.get_url(object_name=episode_name)

@@ -7,13 +7,21 @@ from anime.services import anime_to_dict
 
 from urllib.parse import unquote
 import json
+from services.redis_service import R, EXPIRE_3DAY
 
 
 class FilterView(APIView):
     def get(self, request, page_number: int = 1):
-        anime_list = [anime_to_dict(anime=anime, mode='full') for anime in Anime.objects.all()]
 
         req_data = request.GET.get('data')
+        hash_name = json.dumps(req_data, ensure_ascii=False)
+
+        redis_output = R.get(hash_name)
+        if redis_output:
+            redis_output = json.loads(redis_output)
+            return Response(redis_output, status=200)
+
+        anime_list = [anime_to_dict(anime=anime, mode='full') for anime in Anime.objects.all()]
 
         if req_data is not None:
             req_data = json.loads(unquote(req_data))
@@ -57,4 +65,8 @@ class FilterView(APIView):
             "pages": paginator.num_pages,
             "anime_list": output_page
         }
+        output_json = json.dumps(output, ensure_ascii=False)
+        R.set(hash_name, output_json)
+        R.expire(hash_name, EXPIRE_3DAY)
+
         return Response(output)
