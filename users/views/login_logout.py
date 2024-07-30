@@ -21,6 +21,7 @@ class LoginView(APIView):
                 key='test_cookie',
                 value='cookie_value',
                 httponly=False,
+                samesite='None',
             )
             return response
             # token, created = Token.objects.get_or_create(user=user)

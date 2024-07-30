@@ -58,6 +58,8 @@ CORS_ALLOWED_ORIGINS = [
     INTERNAL_ORIGIN,
 ]
 
+CORS_ALLOW_CREDENTIALS = True
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -147,8 +149,10 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 SESSION_COOKIE_SECURE = False
-SESSION_COOKIE_HTTPONLY = False
+SESSION_COOKIE_HTTPONLY = True     # True
 SESSION_COOKIE_SAMESITE = 'None'
 
+
+
 AUTH_USER_MODEL = 'users.User'
-LOGIN_URL = '/'
+LOGIN_URL ='/'

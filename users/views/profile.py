@@ -1,6 +1,7 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
-from rest_framework.views import APIView
 
+from rest_framework.views import APIView
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from services.s3_service import S3Service
@@ -8,7 +9,8 @@ from anime.services import anime_to_dict, get_anime_by_id
 from users.models import User
 
 
-class ProfileView(LoginRequiredMixin, APIView):
+class ProfileView(APIView):
+    permission_classes = [IsAuthenticated]
     def get(self, request):
         user = request.user
         if user:

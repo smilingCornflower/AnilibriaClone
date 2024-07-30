@@ -33,7 +33,7 @@ class S3Service:
                     'Bucket': self.bucket_name,
                     'Key': object_name
                 },
-                ExpiresIn=3600 * 3  # 3 hours
+                ExpiresIn=3600 * 4  # 4 hours
             )
             return url
         except ClientError as e:
