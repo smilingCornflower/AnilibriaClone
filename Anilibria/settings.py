@@ -146,5 +146,9 @@ USE_TZ = True
 STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+SESSION_COOKIE_SECURE = False
+SESSION_COOKIE_HTTPONLY = False
+SESSION_COOKIE_SAMESITE = 'None'
+
 AUTH_USER_MODEL = 'users.User'
-LOGIN_URL = '/user/login/'
+LOGIN_URL = '/'

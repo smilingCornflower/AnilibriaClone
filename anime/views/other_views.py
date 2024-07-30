@@ -8,7 +8,7 @@ from anime.models.episode_model import Episode
 from anime.services import anime_to_dict
 from services.s3_service import S3Service
 
-from services.redis_service import R, EXPIRE_3DAY, EXPIRE_1WEEK
+from services.redis_service import R, EXPIRE_3HOUR
 import json
 
 class ReleaseView(APIView):
@@ -39,7 +39,7 @@ class ReleaseView(APIView):
 
         output_json = json.dumps(output, ensure_ascii=False)
         R.set(hash_name, output_json)
-        R.expire(hash_name, EXPIRE_1WEEK)
+        R.expire(hash_name, EXPIRE_3HOUR)
         return Response(output, status=200)
 
 
@@ -63,7 +63,7 @@ class ScheduleView(APIView):
 
         output_json = json.dumps(output, ensure_ascii=False)
         R.set(hash_name, output_json)
-        R.expire(hash_name, EXPIRE_3DAY)
+        R.expire(hash_name, EXPIRE_3HOUR)
 
         return Response(output, status=200)
 
@@ -84,6 +84,6 @@ class AlphabetView(APIView):
         }
         output_json = json.dumps(output, ensure_ascii=False)
         R.set(hash_name, output_json)
-        R.expire(hash_name, EXPIRE_1WEEK)
+        R.expire(hash_name, EXPIRE_3HOUR)
 
         return Response(output, status=200)

@@ -7,7 +7,7 @@ from anime.services import anime_to_dict
 
 from urllib.parse import unquote
 import json
-from services.redis_service import R, EXPIRE_3DAY
+from services.redis_service import R, EXPIRE_1HOUR
 
 
 class FilterView(APIView):
@@ -67,6 +67,6 @@ class FilterView(APIView):
         }
         output_json = json.dumps(output, ensure_ascii=False)
         R.set(hash_name, output_json)
-        R.expire(hash_name, EXPIRE_3DAY)
+        R.expire(hash_name, EXPIRE_1HOUR)
 
         return Response(output)

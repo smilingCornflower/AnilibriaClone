@@ -8,7 +8,7 @@ from .context import context
 from urllib.parse import unquote
 
 import json
-from services.redis_service import R, EXPIRE_1DAY
+from services.redis_service import R, EXPIRE_3HOUR
 
 
 class YouTubeVideoView(APIView):
@@ -41,7 +41,7 @@ class YouTubeVideoView(APIView):
 
         output_json = json.dumps(output, ensure_ascii=False)
         R.set(hash_name, output_json)
-        R.expire(hash_name, EXPIRE_1DAY)
+        R.expire(hash_name, EXPIRE_3HOUR)
 
         return Response(output)
 
@@ -64,7 +64,7 @@ class SidePanelView(APIView):
 
         output_json = json.dumps(output, ensure_ascii=False)
         R.set(hash_name, output_json)
-        R.expire(hash_name, EXPIRE_1DAY)
+        R.expire(hash_name, EXPIRE_3HOUR)
 
         return Response(output)
 
