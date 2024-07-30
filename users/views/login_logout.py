@@ -17,12 +17,6 @@ class LoginView(APIView):
         if user:
             login(request, user)
             response = Response({"message": "User is authenticated"}, status=200)
-            response.set_cookie(
-                key='test_cookie',
-                value='cookie_value',
-                httponly=False,
-                samesite='None',
-            )
             return response
             # token, created = Token.objects.get_or_create(user=user)
 
