@@ -1,5 +1,6 @@
 from anime.models.anime_model import Anime
 from anime.models.episode_model import Episode
+from anime.models.comments_model import Comment
 from services.s3_service import S3Service
 
 
@@ -86,3 +87,17 @@ def get_episodes_number(anime_id: int) -> int:
     except Exception:
         return 0
     return episodes_count
+
+
+def get_comments_to_anime(anime) -> list:
+    comments = Comment.objects.filter(anime=anime)
+
+    output = []
+    for i in comments:
+        comment = {
+            "username": i.user.username,
+            "content": i.content,
+            "published_at": i.created_at.strftime('%d.%m.%Y %H:%M'),
+        }
+        output.append(comment)
+    return output

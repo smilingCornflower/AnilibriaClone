@@ -4,7 +4,7 @@ from django.shortcuts import get_object_or_404
 
 from anime.models.anime_model import Anime
 from anime.models.episode_model import Episode
-from anime.services import anime_to_dict
+from anime.services import anime_to_dict, get_comments_to_anime
 
 from services.s3_service import s3
 
@@ -23,6 +23,8 @@ class WatchView(APIView):
 
         anime = get_object_or_404(Anime, slug=anime_slug)
         anime_info = anime_to_dict(anime, mode='full')
+        anime_comments = {"comments": get_comments_to_anime(anime)}
+        anime_info.update(anime_comments)
 
         anime_info_json = json.dumps(anime_info, ensure_ascii=False)
         R.set(hash_name, anime_info_json)
@@ -52,4 +54,6 @@ class RandomWatchView(APIView):
     def get(self, request):
         random_anime = choice(Anime.objects.all())
         anime_info = anime_to_dict(random_anime, mode='full')
+        anime_comments = {"comments": get_comments_to_anime(random_anime)}
+        anime_info.update(anime_comments)
         return Response(anime_info, status=200)

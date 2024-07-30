@@ -2,6 +2,7 @@ from django.contrib import admin
 from .models.anime_model import Anime
 from .models.other_models import Genre, Voice, Timing, Subtitles
 from .models.episode_model import Episode
+from .models.comments_model import Comment
 
 @admin.register(Anime)
 class AnimeAdmin(admin.ModelAdmin):
@@ -34,3 +35,8 @@ class SubtitlesAdmin(admin.ModelAdmin):
 class EpisodeAdmin(admin.ModelAdmin):
     autocomplete_fields = ['anime']
     search_fields = ['anime__title__icontains']
+
+
+@admin.register(Comment)
+class CommentAdmin(admin.ModelAdmin):
+    search_fields = ('user__username',)
